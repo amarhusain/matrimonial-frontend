@@ -1,0 +1,36 @@
+/** User Testimonials Section */
+
+.testimonials {
+    background-color: #fff5f6;
+}
+
+.card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.text-rose-600 {
+    color: #e11d48;
+}
+
+.text-rose-700 {
+    color: #be123c;
+}
+
+.btn-rose {
+    background-color: #e11d48;
+    border-color: #e11d48;
+    color: white;
+}
+
+.btn-rose:hover {
+    background-color: #be123c;
+    border-color: #be123c;
+}
+
+.star-rating .bi {
+    font-size: 1.2rem;
+}

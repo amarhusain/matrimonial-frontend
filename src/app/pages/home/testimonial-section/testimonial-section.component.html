@@ -1,0 +1,42 @@
+<!-- User Testimonials Section -->
+<section class="testimonials py-5 bg-rose-50">
+    <div class="container">
+        <h2 class="text-center text-rose-700 mb-5">What Our Users Say</h2>
+        <div class="row g-4">
+            <div *ngFor="let testimonial of testimonials" class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img [src]="testimonial.imageUrl" [alt]="testimonial.name" class="rounded-circle me-3"
+                                width="60" height="60">
+                            <div>
+                                <h3 class="card-title h5 mb-0 text-rose-600">{{ testimonial.name }}, {{ testimonial.age
+                                    }}</h3>
+                                <p class="text-muted mb-0"><small>{{ testimonial.location }}</small></p>
+                            </div>
+                        </div>
+                        <p class="card-text mb-3">"{{ testimonial.quote }}"</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="star-rating">
+                                <i *ngFor="let star of [1,2,3,4,5]" class="bi"
+                                    [ngClass]="{'bi-star-fill text-warning': star <= testimonial.rating, 'bi-star text-muted': star > testimonial.rating}"></i>
+                            </div>
+                            <span class="text-muted">{{ testimonial.rating }}/5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <div class="overall-rating mb-3">
+                <h3 class="h4 text-rose-600">Overall User Satisfaction</h3>
+                <div class="star-rating d-inline-block">
+                    <i *ngFor="let star of [1,2,3,4,5]" class="bi bi-star-fill text-warning fs-3"></i>
+                </div>
+                <span class="fs-3 ms-2 text-rose-600">4.8/5</span>
+            </div>
+            <p class="text-muted mb-4">Based on over 10,000 user reviews</p>
+            <a href="#" class="btn btn-rose">Read More Success Stories</a>
+        </div>
+    </div>
+</section>

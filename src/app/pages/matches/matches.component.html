@@ -1,0 +1,12 @@
+<!-- matches.component.html -->
+<div class="container mt-5">
+    <h2>Suggested Profiles</h2>
+    <div *ngFor="let match of matches" class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ match.name }}</h5>
+            <p class="card-text">Age: {{ match.age }}</p>
+            <p class="card-text">Religion: {{ match.religion }}</p>
+            <p class="card-text">Gender: {{ match.gender }}</p>
+        </div>
+    </div>
+</div>

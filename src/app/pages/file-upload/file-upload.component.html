@@ -1,0 +1,11 @@
+<!-- file-upload.component.html -->
+<div class="container mt-5">
+    <h2>Upload Profile Picture</h2>
+    <form [formGroup]="fileForm" (ngSubmit)="uploadFile()">
+        <div class="form-group mb-3">
+            <label for="file">Select File</label>
+            <input type="file" id="file" (change)="handleFileInput($event)" class="form-control-file" />
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+</div>

@@ -1,0 +1,29 @@
+.bg-rose-100 {
+    background-color: #ffe4e6;
+}
+
+.text-rose-700 {
+    color: #be123c;
+}
+
+.btn-rose {
+    background-color: #e11d48;
+    border-color: #e11d48;
+    color: white;
+}
+
+.btn-rose:hover:not(:disabled) {
+    background-color: #be123c;
+    border-color: #be123c;
+}
+
+.btn-rose:disabled {
+    background-color: #f43f5e;
+    border-color: #f43f5e;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #f43f5e;
+    box-shadow: 0 0 0 0.2rem rgba(244, 63, 94, 0.25);
+}

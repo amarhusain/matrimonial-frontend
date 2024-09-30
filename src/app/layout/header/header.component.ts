@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { APP_ROUTES } from '../../utils/constant';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-
+  ROUTES = APP_ROUTES;
   constructor(private authService: AuthService) { }
 
   isLoggedIn(): boolean {

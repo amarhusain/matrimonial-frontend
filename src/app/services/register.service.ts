@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
+import { environment } from '../../environments/environment'; // Import environment config
 
 export interface RegistrationData {
   name: string;
@@ -8,19 +9,21 @@ export interface RegistrationData {
   password: string;
   gender: string;
   dateOfBirth: string;
+  religion: string;
+  occupation: string;
+  recaptcha: string;
+  termsAccepted: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterService {
-
-  private apiUrl = 'https://api.eternalhearts.com/register'; // Replace with your actual API URL
-
-  constructor(private http: HttpClient) { }
+  private apiUrl = environment.apiUrl;
+  private http = inject(HttpClient);
 
   registerUser(userData: RegistrationData): Observable<any> {
-    return this.http.post(this.apiUrl, userData).pipe(
+    return this.http.post(`${this.apiUrl}/auth/signup`, userData).pipe(
       map(response => response),
       catchError(this.handleError<any>('registerUser'))
     );

@@ -1,20 +1,22 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment'; // Import environment config
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  private loginUrl = 'http://localhost:8080/api/auth/login';  // Replace with your backend URL
-  private logoutUrl = 'http://localhost:8080/api/auth/logout';  // Replace with your backend URL
+  private apiUrl = environment.apiUrl;
   private loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
-  constructor(private http: HttpClient) { }
+
+  private http = inject(HttpClient);
+
 
   login(username: string, password: string): Observable<any> {
     const body = { username, password };
-    return this.http.post<any>(this.loginUrl, body).pipe(
+    return this.http.post<any>(`${this.apiUrl}/auth/signin`, body).pipe(
       tap(response => {
         // Store the response in localStorage
         localStorage.setItem('userData', JSON.stringify(response));
@@ -32,7 +34,7 @@ export class AuthService {
   logout(): Observable<any> {
     localStorage.removeItem('userData');
     this.loggedInSubject.next(false); // Notify subscribers
-    return this.http.post<any>(this.logoutUrl, {});
+    return this.http.post<any>(`${this.apiUrl}/auth/logout`, {});
   }
 
   isLoggedIn(): boolean {

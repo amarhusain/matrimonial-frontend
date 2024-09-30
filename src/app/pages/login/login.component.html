@@ -18,7 +18,7 @@
                         placeholder="Enter your password">
                     <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)"
                         class="text-danger mt-1">
-                        Password must be at least 6 characters long.
+                        Password must be at least 4 characters long.
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary w-100 rounded-pill"

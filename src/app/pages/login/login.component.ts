@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { APP_ROUTES } from '../../utils/constant';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +15,10 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
     });
   }
 
@@ -25,16 +27,14 @@ export class LoginComponent {
       // Extract email and password from the form
       const username = this.loginForm.get('email')?.value;
       const password = this.loginForm.get('password')?.value;
-      this.authService.login(username, password).subscribe(
-        response => {
+
+      this.authService.login(username, password).subscribe({
+        next: (response: any) => {
           console.log('Login successful', response);
-          // Handle success (e.g., save token, redirect)
+          this.router.navigateByUrl(APP_ROUTES.HOME);
         },
-        error => {
-          console.error('Login failed', error);
-          // Handle error (e.g., show error message)
-        }
-      );
+        error: (err: any) => console.error('Login failed', err)
+      });
     } else {
       console.error('Form is invalid');
       // Optionally display form validation errors

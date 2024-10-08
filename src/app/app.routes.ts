@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home/home-page/home-page.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { profileResolver } from './pages/profile/profile.resolver';
+import { authGuard } from './security/auth.guard';
 import { APP_ROUTES } from './utils/constant';
 
 export const routes: Routes = [
@@ -15,8 +17,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent)
     },
     {
-        path: APP_ROUTES.PROFILE,
-        loadComponent: () => import('./pages/profile-form/profile-form.component').then(m => m.ProfileFormComponent)
+        path: APP_ROUTES.PROFILE + '/:id',
+        loadComponent: () => import('./pages/profile/profile-page/profile-page.component').then(m => m.ProfilePageComponent),
+        resolve: { profileResponse: profileResolver },
+        canActivate: [authGuard]
     },
     {
         path: APP_ROUTES.MATCHES,

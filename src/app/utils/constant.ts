@@ -17,7 +17,7 @@ export enum APP_ROUTES {
     CONTACT = "contact",
     LOGIN = "login",
     REGISTER = "register",
-    PROFILE = "profile",
+    PROFILE = "profiles",
     MATCHES = "matches",
     UPLOAD = "upload"
 }

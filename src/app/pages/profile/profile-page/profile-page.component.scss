@@ -1,0 +1,42 @@
+/* profile-edit.component.css */
+// .profile-edit-container {
+//     max-width: 600px;
+//     margin: 0 auto;
+//     padding: 20px;
+//     font-family: Arial, sans-serif;
+// }
+
+// .form-field {
+//     margin-bottom: 15px;
+// }
+
+// label {
+//     font-weight: bold;
+//     margin-right: 10px;
+// }
+
+// button {
+//     margin-left: 10px;
+//     cursor: pointer;
+//     background: none;
+//     border: none;
+//     font-size: 16px;
+// }
+
+.verified {
+    color: #10b981;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #e0e0e0;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: #10b981;
+    transition: width 0.5s ease-in-out;
+}

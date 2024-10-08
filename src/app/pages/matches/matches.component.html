@@ -1,12 +1,54 @@
-<!-- matches.component.html -->
+<div class="search-container">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="gender">Gender</label>
+                <select formControlName="gender" id="gender" class="form-control">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="ageRange">Age Range</label>
+                <input type="text" id="ageRange" formControlName="ageRange" class="form-control"
+                    placeholder="e.g. 25-30" />
+            </div>
+            <div class="col-md-3">
+                <label for="city">City</label>
+                <input type="text" id="city" formControlName="city" class="form-control" placeholder="City" />
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Display the search results -->
 <div class="container mt-5">
     <h2>Suggested Profiles</h2>
-    <div *ngFor="let match of matches" class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">{{ match.name }}</h5>
-            <p class="card-text">Age: {{ match.age }}</p>
-            <p class="card-text">Religion: {{ match.religion }}</p>
-            <p class="card-text">Gender: {{ match.gender }}</p>
+    <div class="profile-list" *ngIf="profiles.length > 0">
+        <div *ngFor="let profile of profiles" class="card mb-3">
+            <img [src]="profile.profilePictureUrl" alt="Profile Picture" class="profile-img" />
+            <div class="card-body">
+                <h4 class="card-title">{{ profile.firstName }}</h4>
+                <p class="card-text">Age: {{ profile.dateOfBirth }}</p>
+                <p class="card-text">Religion: {{ profile.sect +", "+ profile.religion }}</p>
+                <p class="card-text">City: {{ profile.city }}</p>
+            </div>
         </div>
     </div>
-</div>
+
+
+    <div class="container mt-5">
+        <h2>Suggested Profiles</h2>
+        <div *ngFor="let match of matches" class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ match.name }}</h5>
+                <p class="card-text">Age: {{ match.age }}</p>
+                <p class="card-text">Religion: {{ match.religion }}</p>
+                <p class="card-text">Gender: {{ match.gender }}</p>
+            </div>
+        </div>
+    </div>

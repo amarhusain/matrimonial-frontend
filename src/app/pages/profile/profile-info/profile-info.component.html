@@ -1,0 +1,32 @@
+<div class="col">
+    <div class="d-flex align-items-center">
+        <h6 class="mb-0">{{ label }}:</h6>
+        <p class="ms-3 mb-0" *ngIf="value; else noValueTemplate">
+            {{ value }}
+            <span>
+                <span *ngIf="isVerified" class="text-success">(Verified)</span>
+                <span *ngIf="!isVerified" class="text-danger">(Not Verified)</span>
+                <button *ngIf="!isVerified" (click)="verify()" class="btn btn-primary btn-sm ms-3">
+                    Verify <i class="bi bi-pencil"></i>
+                </button>
+            </span>
+        </p>
+        <ng-template #noValueTemplate>
+            <span class="text-muted ms-3">NA</span>
+            <button (click)="edit()" class="btn btn-primary btn-sm ms-3">
+                Edit <i class="bi bi-pencil"></i>
+            </button>
+
+            <div>
+                <input [(ngModel)]="contactInfoValue" [placeholder]="'Enter new ' + label"
+                    [type]="label === 'Email' ? 'email' : 'text'">
+                <button (click)="edit()" class="btn btn-primary btn-sm ms-3">
+                    Save <i class="bi bi-pencil"></i>
+                </button>
+                <button (click)="edit()" class="btn btn-primary btn-sm ms-3">
+                    Cancel <i class="bi bi-pencil"></i>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</div>

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { User } from '../../models/user.model';
-import { UserService } from '../../services/user.service';
+import { User, UserData } from '../../../models/user.model';
+import { AuthService } from '../../../services/auth.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-profile-form',
@@ -18,13 +19,15 @@ export class ProfileFormComponent {
   editValue: string = '';
 
   private userService = inject(UserService);
+  private authService = inject(AuthService);
 
   ngOnInit() {
     this.loadUserProfile();
   }
 
   loadUserProfile() {
-    this.userService.getUserProfile().subscribe({
+    const userData: UserData = this.authService.getUserData();
+    this.userService.getUserProfile(userData.id).subscribe({
       next: (user: any) => this.user = user,
       error: (err: any) => console.error('Error loading user profile', err)
     });

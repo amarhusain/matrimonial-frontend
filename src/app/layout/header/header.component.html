@@ -9,13 +9,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a i18n class="nav-link text-rose-600" routerLink="/home">Home</a>
+                    <a i18n class="nav-link text-rose-600" [routerLink]="ROUTES.HOME">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-rose-600" routerLink="/matches">Match</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-rose-600" routerLink="/login">Messages</a>
+                    <a i18n class="nav-link text-rose-600" [routerLink]="ROUTES.SEARCH_PROFILE_PAGE">Search Profiles</a>
                 </li>
 
             </ul>
@@ -33,15 +30,23 @@
                             <i class="bi bi-person-circle"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li *ngIf="isLoggedIn()">
+                                <a class="dropdown-item" [routerLink]="ROUTES.MATCHES" *ngIf="isLoggedIn()">My
+                                    Matches</a>
+                            </li>
+                            <li *ngIf="isLoggedIn()">
+                                <a class="dropdown-item" routerLink="/login">Messages</a>
+                            </li>
                             <li>
-                                <a class="dropdown-item" [routerLink]="ROUTES.PROFILE" *ngIf="isLoggedIn()"
-                                    (click)="navigateToProfile()">Profile</a>
+                                <a class="dropdown-item" href="#" *ngIf="isLoggedIn()"
+                                    (click)="navigateToProfile($event)">My
+                                    Profile</a>
                             </li>
                             <li><a class="dropdown-item" [routerLink]="ROUTES.LOGIN" *ngIf="!isLoggedIn()">
                                     Login</a></li>
                             <li><a class="dropdown-item" href="#" (click)="onLogout()" *ngIf="isLoggedIn()">Logout</a>
                             </li>
-                            <li><a class="dropdown-item" [routerLink]="ROUTES.REGISTER" *ngIf="!isLoggedIn()">Sign
+                            <li><a class="dropdown-item" [routerLink]="ROUTES.REGISTER_PAGE" *ngIf="!isLoggedIn()">Sign
                                     Up</a></li>
                         </ul>
                     </li>

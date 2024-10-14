@@ -1,0 +1,165 @@
+<div class="container mt-4">
+
+
+    <div class="card" style="width:992px; margin-left: auto; margin-right: auto;">
+        <div class="card-body">
+            <h4 class="card-title mb-3">Search Profiles</h4>
+
+            <div class="card mt-card">
+                <div class="card-body ">
+                    <form (ngSubmit)="onSubmitIdSearch()">
+
+                        <div class="row mb-3 mt-3">
+                            <label for="profileId" class="col-sm-2 col-form-label">Profile ID</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input [(ngModel)]="profileId" name="profileId" type="text" class="form-control"
+                                        id="profileId" placeholder="Enter Profile ID">
+                                    <button class="btn btn-primary" type="button" id="button-addon2">Button</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <hr class="hr-text" data-content="OR">
+
+            <div class="card mt-card">
+                <div class="card-body">
+
+                    <form (ngSubmit)="onSubmitCriteriaSearch()">
+                        <div class="row mb-5">
+                            <label for="profileId" class="col-sm-2 col-form-label">Looking For</label>
+                            <div class="col-sm-10">
+                                <div class="btn-group d-flex" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn"
+                                        [class.btn-primary]="criteria.lookingFor === 'bride'"
+                                        [class.btn-tab-outline]="criteria.lookingFor !== 'bride'"
+                                        (click)="selectLookingFor('bride')">
+                                        Bride
+                                    </button>
+                                    <button type="button" class="btn"
+                                        [class.btn-primary]="criteria.lookingFor === 'groom'"
+                                        [class.btn-tab-outline]="criteria.lookingFor !== 'groom'"
+                                        (click)="selectLookingFor('groom')">
+                                        Groom
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <label for="ageRange" class="col-sm-2 col-form-label">Age Range</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input [(ngModel)]="criteria.minAge" name="minAge" type="number"
+                                        class="form-control" placeholder="Min Age">
+                                    <span class="input-group-text">to</span>
+                                    <input [(ngModel)]="criteria.maxAge" name="maxAge" type="number"
+                                        class="form-control" placeholder="Max Age">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <label for="heightRange" class="col-sm-2 col-form-label">Height Range (cm)</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input [(ngModel)]="criteria.minHeight" name="minHeight" type="number"
+                                        class="form-control" placeholder="Min Height">
+                                    <span class="input-group-text">to</span>
+                                    <input [(ngModel)]="criteria.maxHeight" name="maxHeight" type="number"
+                                        class="form-control" placeholder="Max Height">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <label for="religion" class="col-sm-2 col-form-label">Religion</label>
+                            <div class="col-sm-10">
+                                <select [(ngModel)]="criteria.religion" name="religion" id="religion"
+                                    class="form-select" (change)="onReligionChange()">
+                                    <option value="" disabled selected>Choose Religion</option>
+                                    <option *ngFor="let religion of religions" [value]="religion.name">
+                                        {{ religion.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <label for="religion" class="col-sm-2 col-form-label">Sect</label>
+                            <div class="col-sm-10">
+                                <select [(ngModel)]="criteria.sect" name="sect" id="sect" class="form-select"
+                                    [disabled]="!criteria.religion">
+                                    <option value="" disabled selected>Choose Sect</option>
+                                    <option *ngFor="let sect of availableSects" [value]="sect">
+                                        {{ sect }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <label for="incomeRange" class="col-sm-2 col-form-label">Annual Income</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input [(ngModel)]="criteria.minIncome" name="minIncome" type="number"
+                                        class="form-control" placeholder="Min Income">
+                                    <span class="input-group-text">to</span>
+                                    <input [(ngModel)]="criteria.maxIncome" name="maxIncome" type="number"
+                                        class="form-control" placeholder="Max Income">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <label for="maritalStatus" class="col-sm-2 col-form-label">Marital Status</label>
+                            <div class="col-sm-10">
+                                <select [(ngModel)]="criteria.maritalStatus" name="maritalStatus" id="maritalStatus"
+                                    class="form-select">
+                                    <option value="">Select Marital Status</option>
+                                    <option value="never_married">Never Married</option>
+                                    <option value="divorced">Divorced</option>
+                                    <option value="widowed">Widowed</option>
+                                    <option value="separated">Separated</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <label for="profileId" class="col-sm-2 col-form-label">Photo</label>
+                            <div class="col-sm-10">
+                                <div class="btn-group d-flex" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn"
+                                        [class.btn-primary]="criteria.profilePhoto === 'no'"
+                                        [class.btn-tab-outline]="criteria.profilePhoto !== 'no'"
+                                        (click)="selectProfilePhoto('no')">
+                                        All Profiles
+                                    </button>
+                                    <button type="button" class="btn"
+                                        [class.btn-primary]="criteria.profilePhoto === 'yes'"
+                                        [class.btn-tab-outline]="criteria.profilePhoto !== 'yes'"
+                                        (click)="selectProfilePhoto('yes')">
+                                        Profiles with photo only
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" [disabled]="isSearching">
+                                <span *ngIf="isSearching" class="spinner-grow spinner-grow-sm"
+                                    aria-hidden="true"></span>
+                                <span role="status">{{ isSearching ? 'Searching...' : 'Search' }}</span>
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

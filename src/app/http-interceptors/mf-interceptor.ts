@@ -1,11 +1,15 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { catchError, Observable, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { APP_ROUTES } from '../utils/constant';
 
 @Injectable()
 export class MfInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private router: Router) {
     console.log('MfInterceptor instantiated');  // This should print when the interceptor is initialized
   }
 
@@ -23,6 +27,32 @@ export class MfInterceptor implements HttpInterceptor {
       });
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        // Handle HTTP errors here
+        if (error.status === 401) {
+          console.error('Unauthorized access:', error);
+
+          // Handle the 401 error
+          this.handle401Error();
+        } else {
+          // Handle other errors
+          console.error('An error occurred:', error);
+        }
+
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private handle401Error(): void {
+    // Clear any stored authentication tokens
+    this.authService.logout();
+
+    // Redirect to login page
+    this.router.navigate([APP_ROUTES.LOGIN]);
+
+    // Optionally, show a notification to the user
+    // this.notificationService.showError('Your session has expired. Please log in again.');
   }
 }

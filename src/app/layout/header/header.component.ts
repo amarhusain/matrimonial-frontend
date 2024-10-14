@@ -32,9 +32,10 @@ export class HeaderComponent {
     return this.authService.isLoggedIn(); // Check login status
   }
 
-  navigateToProfile(): void {
+  navigateToProfile(event: Event): void {
+    event.preventDefault(); // Prevent default anchor behavior
     if (this.userData) {
-      this.router.navigate([`/${APP_ROUTES.PROFILE}`, this.userData?.id])
+      this.router.navigate([`/${APP_ROUTES.PROFILE_PAGE}`, this.userData?.id])
     }
   }
 

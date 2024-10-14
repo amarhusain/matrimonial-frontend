@@ -30,7 +30,7 @@
     <h2>Suggested Profiles</h2>
     <div class="profile-list" *ngIf="profiles.length > 0">
         <div *ngFor="let profile of profiles" class="card mb-3">
-            <img [src]="profile.profilePictureUrl" alt="Profile Picture" class="profile-img" />
+            <img [src]="profile.photoUrl" alt="Profile Picture" class="profile-img" />
             <div class="card-body">
                 <h4 class="card-title">{{ profile.firstName }}</h4>
                 <p class="card-text">Age: {{ profile.dateOfBirth }}</p>

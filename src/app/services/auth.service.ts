@@ -10,8 +10,8 @@ import { UserData } from '../models/user.model';
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
-  public loggedInStatus: Observable<boolean> = this.loggedInSubject.asObservable();
+  // private loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
+  // public loggedInStatus: Observable<boolean> = this.loggedInSubject.asObservable();
 
 
   private currentUserSubject: BehaviorSubject<UserData | null> = new BehaviorSubject<UserData | null>(null);
@@ -32,7 +32,7 @@ export class AuthService {
       tap(response => {
         // Store the response in localStorage
         localStorage.setItem('userData', JSON.stringify(response));
-        this.loggedInSubject.next(true); // Notify subscribers
+        // this.loggedInSubject.next(true); // Notify subscribers
         this.currentUserSubject.next(response);
       })
     );
@@ -56,7 +56,7 @@ export class AuthService {
 
   logout(): Observable<any> {
     localStorage.removeItem('userData');
-    this.loggedInSubject.next(false); // Notify subscribers
+    // this.loggedInSubject.next(false); // Notify subscribers
     this.currentUserSubject.next(null);
     return this.http.post<any>(`${this.apiUrl}/auth/logout`, {});
   }

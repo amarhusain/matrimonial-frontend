@@ -4,13 +4,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { APP_ROUTES } from '../../../utils/constant';
+import { countries, Country } from '../../../utils/country';
 // import { RecaptchaFormsModule, RecaptchaModule } from 'ng-recaptcha';
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-registration-page',
   standalone: true,
   // imports: [CommonModule, ReactiveFormsModule, RouterLink, RecaptchaModule, RecaptchaFormsModule],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterLink,
+    NgLabelTemplateDirective,
+    NgOptionTemplateDirective,
+    NgSelectComponent,],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss'
 })
@@ -21,7 +30,7 @@ export class RegistrationPageComponent {
   otp: string = '';
   signupId: string = '';
   showOtpInput: boolean = false;
-  countryCode: string = '+1';  // Default country code
+  selectedCountryCode: string = '+91';  // Default country code
   isMobileNumber: boolean = false;
 
   passwordStrength = 0;
@@ -29,12 +38,19 @@ export class RegistrationPageComponent {
   passwordStrengthColor = '';
   showPwdStrengthBar: boolean = false;
 
+  countries: Country[] = countries;
+
 
 
   constructor(private authService: AuthService, private router: Router) {
 
   }
 
+
+  selectCountry(country: Country) {
+    this.selectedCountryCode = country.code;
+    console.log('Selected country:', country);
+  }
   onInputChange() {
     // Simple regex to check if input is likely a mobile number
     const mobileRegex = /^[0-9]+$/;
@@ -73,7 +89,7 @@ export class RegistrationPageComponent {
   initiateSignup() {
     let contactInfo = this.emailOrMobile;
     if (this.isMobileNumber) {
-      contactInfo = this.countryCode + this.emailOrMobile;
+      contactInfo = this.selectedCountryCode + this.emailOrMobile;
     }
 
     this.authService.initiateSignup(contactInfo, this.password).subscribe(

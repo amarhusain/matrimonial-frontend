@@ -22,7 +22,11 @@ export interface ProfileDto {
     city: string;
     state: string;
     country: string;
-    profilePictureUrl: string;
+    height: string;
+    income: string;
+    maritalStatus: string;
+    workplace: string;
+    photoUrl: string;
     bio: string;
 }
 
@@ -37,5 +41,12 @@ export interface ProfileSearchDto {
     sect: string;
     occupation: string;
     city: string;
-    profilePictureUrl: string;
+    state: string;
+    country: string;
+    height: string;
+    income: number;
+    maritalStatus: string;
+    workplace: string;
+    photoUrl: string;
 }
+

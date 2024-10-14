@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ProfileResponse } from '../models/profile.model';
@@ -12,7 +12,7 @@ export class ProfileService {
 
   private apiUrl = environment.apiUrl;
 
-  private http = inject(HttpClient);
+  constructor(private http: HttpClient) { }
 
   getUserProfile(id: number): Observable<ProfileResponse> {
     return this.http.get<ProfileResponse>(`${this.apiUrl}/profiles/${id}`);
@@ -38,8 +38,8 @@ export class ProfileService {
     return this.http.post(`${this.apiUrl}/profiles/image`, formData);
   }
 
-  getProfileImage(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/profiles/image`, { responseType: 'blob' });
+  getProfileImage(fileName: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/images/${fileName}`, { responseType: 'blob' });
   }
 
 }

@@ -16,10 +16,13 @@ export enum APP_ROUTES {
     ABOUT = "about",
     CONTACT = "contact",
     LOGIN = "login",
-    REGISTER = "register",
-    PROFILE = "profiles",
+    REGISTER_PAGE = "register",
+    PROFILE_PAGE = "profiles",
     MATCHES = "matches",
-    UPLOAD = "upload"
+    UPLOAD = "upload",
+    SEARCH_PROFILE_PAGE = "search-profile",
+    SEARCH_RESULT_PAGE = "search-result",
+    PROFILE_DETAIL_PAGE = "profile-detail"
 }
 
 export enum CONTACT {
@@ -42,4 +45,13 @@ export enum SOCIAL_LINK {
     TWITTER_ARVIND = "https://twitter.com/DrArvindHomeo?t=43Uje-wd14mZYEz05YIB7w&s=09",
     YOUTUBE_ARVIND = "https://youtube.com/@DrArvindSrivastava/",
     INSTAGRAM_ARVIND = "https://www.instagram.com/dr.arvindsrivastava/",
+}
+
+export enum SEARCH_CRITERIA {
+    MIN_AGE = 21,
+    MAX_AGE = 60,
+    MIN_HEIGHT = 121,
+    MAX_HEIGHT = 220,
+    MIN_INCOME = 5000,
+    MAX_INCOME = 1000000,
 }

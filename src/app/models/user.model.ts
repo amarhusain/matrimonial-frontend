@@ -16,7 +16,7 @@ export interface UserData {
     firstName: string;
     middleName: string;
     lastName: string;
-    profilePictureUrl: string;
+    photoUrl: string;
     roles: string[];
     token: string;
 

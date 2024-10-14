@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, tap } from 'rxjs';
 import { ProfileResponse } from '../../../models/profile.model';
@@ -8,22 +8,22 @@ import { LoaderService } from '../../../services/loader.service';
 import { ProfileService } from '../../../services/profile.service';
 import { UserService } from '../../../services/user.service';
 import { CustomValidators } from '../../../utils/custom-validators';
-import { occupations } from '../../../utils/occupation';
+import { incomes, occupations } from '../../../utils/occupation';
 import { Religion, religions } from '../../../utils/religion';
 import { states } from '../../../utils/state';
 
 @Component({
   selector: 'app-profile-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss'
 })
 export class ProfilePageComponent {
   profileResponse: any = null;
-
   profileForm: FormGroup;
   userForm: FormGroup;
+  heightForm: FormGroup;
   profileCompletion: number = 0;
   editingField: string | null = null;
   loading: boolean = true;
@@ -35,6 +35,7 @@ export class ProfilePageComponent {
   imageUrl: string | null = null;
 
   occupations: string[] = occupations;
+  incomes: string[] = incomes;
   religions: Religion[] = religions;
   availableSects: string[] = [];
   states: string[] = states;
@@ -48,14 +49,16 @@ export class ProfilePageComponent {
     private profileService: ProfileService,
     private userService: UserService,
     public loaderService: LoaderService) {
-
     this.maxDate = new Date().toISOString().split('T')[0]; // Today's date in YYYY-MM-DD format
     this.profileForm = this.fb.group({
       dateOfBirth: ['', [
         CustomValidators.ageValidator,
         CustomValidators.futureDateValidator]
       ],
+      height: [''],
       gender: [''],
+      maritalStatus: [''],
+      income: [''],
       religion: [''],
       sect: [''],
       occupation: [''],
@@ -63,7 +66,8 @@ export class ProfilePageComponent {
       city: [''],
       state: [''],
       country: [''],
-      bio: ['']
+      bio: [''],
+      workplace: ['']
     });
 
     this.userForm = this.fb.group({
@@ -72,6 +76,12 @@ export class ProfilePageComponent {
       isMobileVerified: [''],
       isEmailVerified: ['']
     });
+
+    this.heightForm = this.fb.group({
+      feet: ['', [Validators.required, Validators.min(4), Validators.max(7)]],
+      inches: ['', [Validators.required, Validators.min(0), Validators.max(11)]],
+    });
+
   }
 
   ngOnInit() {
@@ -79,13 +89,34 @@ export class ProfilePageComponent {
       this.profileResponse = data['profileResponse'];
       this.updateForms(this.profileResponse);
     });
-    this.loadProfileImage();
   }
 
   updateForms(data: ProfileResponse): void {
     this.profileForm.patchValue(data.profile);
     this.userForm.patchValue(data.user);
     this.profileCompletion = data.profileCompletion;
+    // this.imageUrl = data.profile.photoUrl;
+    this.loadProfileImage(data.profile.photoUrl);
+    if (!(data.profile.height === null || data.profile.height === '')) {
+      this.extractHeight(data.profile.height);
+    }
+
+  }
+
+  extractHeight(height: string): void {
+    const heightRegex = /^(\d+)'(\d{1,2})"/;  // Regex pattern to match feet and inches
+    const match = height.match(heightRegex);
+
+    if (match) {
+      let feet = match[1];  // Extract feet 
+      let inches = match[2];  // Extract inches
+      this.heightForm.setValue({
+        feet: feet,
+        inches: inches
+      });
+    }
+
+    // console.log(`Feet: ${this.feet}, Inches: ${this.inches}`);
   }
 
   startEditing(field: string): void {
@@ -119,14 +150,19 @@ export class ProfilePageComponent {
         )
         .subscribe();
     } else {
-      // if (field === 'dateOfBirth') {
-      //   // Convert the date to ISO format (YYYY-MM-DD)
-      //   updatedValue = this.formatDate(updatedValue);
-      // }
+      if (field === 'height') {
+        // Convert the date to ISO format (YYYY-MM-DD)
+        updatedValue = `${this.feet?.value}'${this.inches?.value}"`;
+      }
       this.profileService.updateProfileField(field, updatedValue)
         .pipe(
           tap(() => {
             console.log('Field updated successfully:', field, updatedValue);
+            if (field === 'height') {
+              this.profileForm.patchValue({
+                height: updatedValue
+              })
+            }
           }),
           catchError(error => {
             console.error('Error updating field:', error);
@@ -206,7 +242,6 @@ export class ProfilePageComponent {
   }
 
 
-
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0] as File;
   }
@@ -219,7 +254,7 @@ export class ProfilePageComponent {
       this.profileService.uploadProfileImage(formData).subscribe({
         next: (response: any) => {
           console.log('Image uploaded successfully');
-          this.loadProfileImage();
+          // this.loadProfileImage();
         },
         error: (err: any) => {
           console.error('Error uploading image', err);
@@ -228,8 +263,8 @@ export class ProfilePageComponent {
     }
   }
 
-  loadProfileImage() {
-    this.profileService.getProfileImage().subscribe({
+  loadProfileImage(fileName: string) {
+    this.profileService.getProfileImage(fileName).subscribe({
       next: (response: Blob) => {
         const reader = new FileReader();
         reader.readAsDataURL(response);  // Convert Blob to base64 string
@@ -264,6 +299,14 @@ export class ProfilePageComponent {
   // Convenience getter for easy access to form fields
   get mobile() {
     return this.userForm.get('mobile');
+  }
+
+  get feet() {
+    return this.heightForm.get('feet');
+  }
+
+  get inches() {
+    return this.heightForm.get('inches');
   }
 
 }

@@ -15,14 +15,19 @@ export enum APP_ROUTES {
     DETAILS = "details/:id",
     ABOUT = "about",
     CONTACT = "contact",
-    LOGIN = "login",
-    REGISTER_PAGE = "register",
-    PROFILE_PAGE = "profiles",
+    USER_PAGE = "user",
+    LOGIN = "user/login",
+    REGISTER = "user/register",
+    PROFILE = "user/profile",
     MATCHES = "matches",
     UPLOAD = "upload",
-    SEARCH_PROFILE_PAGE = "search-profile",
-    SEARCH_RESULT_PAGE = "search-result",
-    PROFILE_DETAIL_PAGE = "profile-detail"
+    SEARCH_PROFILE = "profile/search",
+    SEARCH_PROFILE_RESULT = "profile/search-result",
+    PROFILE_DETAIL = "profile/detail",
+    UPGRADE_PROFILE = "profile/upgrade",
+    MEMBERSHIP = "membership",
+    ORDER_CONFIRMATION = "membership/order-confirmation",
+    CHECKOUT = "checkout"
 }
 
 export enum CONTACT {

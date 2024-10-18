@@ -35,7 +35,7 @@ export class HeaderComponent {
   navigateToProfile(event: Event): void {
     event.preventDefault(); // Prevent default anchor behavior
     if (this.userData) {
-      this.router.navigate([`/${APP_ROUTES.PROFILE_PAGE}`, this.userData?.id])
+      this.router.navigate(['/user/profile/', this.userData?.id]);
     }
   }
 

@@ -12,7 +12,7 @@
                     <a i18n class="nav-link text-rose-600" [routerLink]="ROUTES.HOME">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a i18n class="nav-link text-rose-600" [routerLink]="ROUTES.SEARCH_PROFILE_PAGE">Search Profiles</a>
+                    <a i18n class="nav-link text-rose-600" [routerLink]="ROUTES.SEARCH_PROFILE">Search Profiles</a>
                 </li>
 
             </ul>
@@ -46,7 +46,7 @@
                                     Login</a></li>
                             <li><a class="dropdown-item" href="#" (click)="onLogout()" *ngIf="isLoggedIn()">Logout</a>
                             </li>
-                            <li><a class="dropdown-item" [routerLink]="ROUTES.REGISTER_PAGE" *ngIf="!isLoggedIn()">Sign
+                            <li><a class="dropdown-item" routerLink="/user/register" *ngIf="!isLoggedIn()">Sign
                                     Up</a></li>
                         </ul>
                     </li>

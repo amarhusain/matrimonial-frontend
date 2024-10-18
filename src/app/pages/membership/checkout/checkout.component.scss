@@ -1,0 +1,65 @@
+ .checkout-container {
+     max-width: 800px;
+     margin: 0 auto;
+     padding: 40px;
+     background-color: #fff;
+     border-radius: 10px;
+     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+     font-family: 'Arial', sans-serif;
+ }
+
+ .title {
+     text-align: center;
+     color: #e91e63;
+     font-size: 32px;
+     margin-bottom: 10px;
+ }
+
+ .subtitle {
+     text-align: center;
+     color: #666;
+     font-size: 18px;
+     margin-bottom: 30px;
+ }
+
+ .plans {
+     display: flex;
+     justify-content: space-between;
+     margin-bottom: 30px;
+ }
+
+ .plan-card {
+     width: 30%;
+     padding: 20px;
+     border: 1px solid #ddd;
+     border-radius: 5px;
+     cursor: pointer;
+     transition: all 0.3s ease;
+ }
+
+ .plan-card:hover,
+ .plan-card.selected {
+     border-color: #e91e63;
+     box-shadow: 0 0 10px rgba(233, 30, 99, 0.2);
+ }
+
+ .plan-card h2 {
+     color: #e91e63;
+     margin-bottom: 10px;
+ }
+
+ .plan-card .price {
+     font-size: 20px;
+     font-weight: bold;
+     margin-bottom: 15px;
+ }
+
+ .plan-card ul {
+     padding-left: 20px;
+ }
+
+ .message {
+     font-style: italic;
+     color: #666;
+     line-height: 1.6;
+ }

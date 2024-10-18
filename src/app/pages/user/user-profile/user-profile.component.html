@@ -1,0 +1,594 @@
+<div *ngIf="loaderService.loading$ | async" class="loader-overlay">
+    <div class="loader"></div>
+</div>
+<div *ngIf="profileResponse">
+    <div class="container mt-5">
+        <h2>User Profile</h2>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="profile-image-container">
+                            <!-- <ng-container *ngIf="isLoading">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </ng-container> -->
+                            <div class="text-center">
+                                <img *ngIf="imageUrl" [src]="imageUrl" alt="Profile Picture" class="rounded-circle"
+                                    width="100" height="100" />
+                            </div>
+                            <ng-container *ngIf="!imageUrl">
+                                <div class="rounded-circle bg-light border"
+                                    style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-person-circle" style="font-size: 50px;"></i>
+                                </div>
+                                <input type="file" (change)="onFileSelected($event)" accept="image/*">
+                                <!-- Upload Image Button (only visible if no image exists) -->
+                                <button (click)="uploadProfileImage()" class="btn btn-primary btn-sm mt-2">
+                                    Upload Image <i class="bi bi-upload"></i>
+                                </button>
+                            </ng-container>
+                            <!-- Edit Button if Image Exists -->
+                            <div class="text-center">
+                                <button *ngIf="imageUrl" (click)="uploadProfileImage()"
+                                    class="btn btn-primary btn-sm ms-auto mt-2">
+                                    Edit <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="ml-3">
+                            <h5>{{ profileResponse.profile.firstName }} {{ profileResponse.profile.lastName }}</h5>
+                        </div>
+                        <div class="profile-completion">
+                            <h6>Profile Completion: {{ profileCompletion }}%</h6>
+                            <div class="progress-bar">
+                                <div class="progress" [style.width.%]="profileCompletion"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-3">
+                    </div>
+                    <div class="col-9">
+                        <div [formGroup]="userForm">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div *ngIf="!isEmailEditing">
+                                        <div *ngIf="userForm.get('email')?.value; else addEmail">
+                                            <p>
+                                                <label> Email:</label> {{ userForm.get('email')?.value }}
+                                                <span *ngIf="userForm.get('isEmailVerified')?.value" class="verified">
+                                                    <i class="bi bi-check-lg"></i> Verified</span>
+                                                <button *ngIf="!userForm.get('isEmailVerified')?.value"
+                                                    class="btn btn-light" (click)="verifyEmail()">Verify</button>
+                                            </p>
+                                        </div>
+                                        <ng-template #addEmail>
+                                            <label> Email:</label> <button (click)="startEmailEditing()">Add
+                                                Email</button>
+                                        </ng-template>
+
+                                    </div>
+                                    <div *ngIf="isEmailEditing">
+                                        <div>
+                                            <label for="email">Email:</label>
+                                            <input id="email" type="email" formControlName="email">
+                                            <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+                                                class="error">
+                                                Please enter a valid email address.
+                                            </div>
+                                        </div>
+                                        <button (click)="saveUserChanges('email')"
+                                            [disabled]="userForm.invalid">Save</button>
+                                        <button (click)="cancelUserFormEditing('email')">Cancel</button>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div *ngIf="!isMobileEditing">
+                                        <div *ngIf="userForm.get('mobile')?.value; else addMobile">
+                                            <p>
+                                                <label>Mobile:</label> {{ userForm.get('mobile')?.value }}
+                                                <span *ngIf="userForm.get('isMobileVerified')?.value" class="verified">
+                                                    <i class="bi bi-check-lg"></i>Verified</span>
+                                                <button *ngIf="!userForm.get('isMobileVerified')?.value"
+                                                    class="btn btn-light" (click)="verifyMobile()">Verify</button>
+                                            </p>
+                                        </div>
+                                        <ng-template #addMobile>
+                                            <label> Mobile: NA</label> <button (click)="startMobileEditing()"
+                                                class="btn btn-light ms-3">Add
+                                                Mobile</button>
+                                        </ng-template>
+
+                                    </div>
+
+                                    <div *ngIf="isMobileEditing">
+                                        <div class="form-group row">
+                                            <label for="mobile" class="col-sm-2 col-form-label">Mobile:</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group mb-3">
+                                                    <input id="mobile" type="text" class="form-control"
+                                                        formControlName="mobile" (keydown)="allowOnlyDigits($event)"
+                                                        maxlength="10">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-light ms-1"
+                                                            (click)="saveUserChanges('mobile')"
+                                                            [disabled]="userForm.invalid">Save</button>
+                                                        <button class="btn btn-light ms-1"
+                                                            (click)="cancelUserFormEditing('mobile')">Cancel</button>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="mobile?.invalid && (mobile?.dirty || mobile?.touched)"
+                                                    class="text-danger">
+                                                    <div *ngIf="mobile?.errors?.['required']">
+                                                        Mobile number is required.
+                                                    </div>
+                                                    <div *ngIf="mobile?.errors?.['invalidmobile']">
+                                                        Mobile number must be 10 digits and numeric.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-3"></div>
+                    <div class="col-9">
+                        <form [formGroup]="profileForm">
+                            <!-- Date of birth input -->
+                            <div class=" form-group row">
+                                <label for="dateOfBirth" class="col-sm-2 col-form-label">Date of birth</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'dateOfBirth'; else dobEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="dateOfBirth"
+                                                value=" {{ profileForm.get('dateOfBirth')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('dateOfBirth')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #dobEditMode>
+                                        <div class="input-group mb-3">
+                                            <input formControlName="dateOfBirth" class="form-control" type="date"
+                                                [max]="maxDate">
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('dateOfBirth')" class="btn btn-light"
+                                                    [disabled]="profileForm.get('dateOfBirth')?.invalid">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="profileForm.get('dateOfBirth')?.errors?.['underage'] && profileForm.get('dateOfBirth')?.touched"
+                                            class="text-danger">
+                                            You must be at least 21 years old.
+                                        </div>
+                                        <div *ngIf="profileForm.get('dateOfBirth')?.errors?.['futureDate'] && profileForm.get('dateOfBirth')?.touched"
+                                            class="text-danger">
+                                            Date of Birth cannot be in the future.
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- Height input -->
+                            <div class=" form-group row">
+                                <label for="height" class="col-sm-2 col-form-label">Height</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'height'; else heightEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="height"
+                                                value=" {{ profileForm.get('height')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('height')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #heightEditMode>
+                                        <form [formGroup]="heightForm">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" formControlName="feet"
+                                                    placeholder="Feet" aria-label="Feet">
+                                                <span class="input-group-text">&</span>
+                                                <input type="text" class="form-control" formControlName="inches"
+                                                    placeholder="Inches" aria-label="Inches">
+                                                <div class="input-group-append">
+                                                    <button (click)="saveEdit('height')" class="btn btn-light">
+                                                        <i class="bi bi-floppy"></i>
+                                                    </button>
+                                                    <button (click)="cancelEdit()" class="btn btn-light">
+                                                        <i class="bi bi-x-lg"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- Gender input -->
+                            <div class=" form-group row">
+                                <label for="gender" class="col-sm-2 col-form-label">Gender</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'gender'; else genderEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="gender"
+                                                value=" {{ profileForm.get('gender')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('gender')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #genderEditMode>
+                                        <div class="input-group mb-3">
+                                            <select formControlName="gender" class="form-select">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('gender')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- Income input -->
+                            <div class=" form-group row">
+                                <label for="income" class="col-sm-2 col-form-label">Income</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'income'; else incomeEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="income"
+                                                value=" {{ profileForm.get('income')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('income')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #incomeEditMode>
+                                        <div class="input-group mb-3">
+                                            <select formControlName="income" class="form-select">
+                                                <option *ngFor="let income of incomes" [value]="income"
+                                                    [selected]="income === profileForm.get('income')?.value">
+                                                    {{income }}
+                                                </option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('income')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- Religion input -->
+                            <div class=" form-group row">
+                                <label for="religion" class="col-sm-2 col-form-label">Religion</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'religion'; else religionEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="religion"
+                                                value=" {{ profileForm.get('religion')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('religion')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #religionEditMode>
+                                        <div class="input-group mb-3">
+                                            <select formControlName="religion" class="form-select"
+                                                (change)="onReligionChange()">
+                                                <option *ngFor="let religion of religions" [value]="religion.name">
+                                                    {{ religion.name }}
+                                                </option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('religion')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- Sect input -->
+                            <div class=" form-group row">
+                                <label for="sect" class="col-sm-2 col-form-label">Sect</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'sect'; else sectEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="sect"
+                                                value=" {{ profileForm.get('sect')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('sect')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #sectEditMode>
+                                        <div class="input-group mb-3">
+                                            <select formControlName="sect" class="form-select">
+                                                <option *ngFor="let sect of availableSects" [value]="sect">
+                                                    {{ sect }}
+                                                </option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('sect')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- Occupation input -->
+                            <div class=" form-group row">
+                                <label for="occupation" class="col-sm-2 col-form-label">Occupation</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'occupation'; else occupationEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="occupation"
+                                                value=" {{ profileForm.get('occupation')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('occupation')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #occupationEditMode>
+                                        <div class="input-group mb-3">
+                                            <select formControlName="occupation" class="form-select">
+                                                <option *ngFor="let occupation of occupations" [value]="occupation"
+                                                    [selected]="occupation === profileForm.get('occupation')?.value">
+                                                    {{ occupation }}
+                                                </option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('occupation')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- Bio input  -->
+                            <div class=" form-group row">
+                                <label for="bio" class="col-sm-2 col-form-label">Bio</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'bio'; else bioEditMode">
+                                        <div class="input-group mb-3">
+                                            <textarea rows="3" readonly class="form-control" id="bio"
+                                                value=" {{ profileForm.get('bio')?.value || 'Not provided' }}"></textarea>
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('bio')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #bioEditMode>
+                                        <div class="input-group mb-3">
+                                            <textarea rows="3" formControlName="bio" class="form-control"></textarea>
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('bio')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- Address input  -->
+                            <div class=" form-group row">
+                                <label for="address" class="col-sm-2 col-form-label">Address</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'address'; else addressEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="address"
+                                                value=" {{ profileForm.get('address')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('address')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #addressEditMode>
+                                        <div class="input-group mb-3">
+                                            <input formControlName="address" class="form-control" type="text">
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('address')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- city input  -->
+                            <div class=" form-group row">
+                                <label for="city" class="col-sm-2 col-form-label">city</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'city'; else cityEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="city"
+                                                value=" {{ profileForm.get('city')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('city')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #cityEditMode>
+                                        <div class="input-group mb-3">
+                                            <input formControlName="city" class="form-control" type="text">
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('city')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </ng-template>
+                                </div>
+                            </div>
+
+
+                            <!-- State input -->
+                            <div class=" form-group row">
+                                <label for="state" class="col-sm-2 col-form-label">State</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'state'; else stateEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="state"
+                                                value=" {{ profileForm.get('state')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('state')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #stateEditMode>
+                                        <div class="input-group mb-3">
+                                            <select formControlName="state" class="form-select">
+                                                <option *ngFor="let state of states" [value]="state">
+                                                    {{ state }}
+                                                </option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('state')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <!-- Country input -->
+                            <div class=" form-group row">
+                                <label for="country" class="col-sm-2 col-form-label">Country</label>
+                                <div class="col-sm-10">
+                                    <ng-container *ngIf="editingField !== 'country'; else countryEditMode">
+                                        <div class="input-group mb-3">
+                                            <input type="text" readonly class="form-control" id="country"
+                                                value=" {{ profileForm.get('country')?.value || 'Not provided' }}">
+                                            <div class="input-group-append">
+                                                <button (click)="startEditing('country')" class="btn btn-light">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #countryEditMode>
+                                        <div class="input-group mb-3">
+                                            <select formControlName="country" class="form-select">
+                                                <option value="India">India</option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <button (click)="saveEdit('country')" class="btn btn-light">
+                                                    <i class="bi bi-floppy"></i>
+                                                </button>
+                                                <button (click)="cancelEdit()" class="btn btn-light">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </div>

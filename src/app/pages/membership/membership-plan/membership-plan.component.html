@@ -1,0 +1,195 @@
+<div class="container-fluid">
+    <div class="row mt-5 mb-5">
+        <!-- Left Sidebar -->
+        <div class="col-md-3  py-3">
+            <div class="card">
+                <div class="card-body">
+
+
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="/api/placeholder/50/50" class="rounded-circle mr-2" alt="Profile Picture">
+                        <div>
+                            <h5 class="mb-0">Hi Ammar!</h5>
+                            <small class="text-muted">YVY12419 <a href="#" class="text-primary">Edit Profile</a></small>
+                        </div>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Matches</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Activity</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Messenger</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Upgrade</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-6 py-3" *ngIf="showUpgradeMembership">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <img src="/api/placeholder/100/100" alt="No Matches" class="mb-3">
+                        <h3>0 Matches found</h3>
+                        <p class="text-muted">You can try <a href="#" class="text-danger">relaxing your preferences</a>
+                            to see
+                            matches</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="col-md-3 py-3" *ngIf="showUpgradeMembership">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">You are <span class="text-danger">missing out</span> on the premium benefits!
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-user-friends text-primary"></i> Get upto 3x more profile views
+                        </li>
+                        <li class="mb-2"><i class="fas fa-phone-alt text-warning"></i> Unlimited voice & video calls
+                        </li>
+                        <li class="mb-2"><i class="fas fa-address-book text-success"></i> Get access to contact details
+                        </li>
+                        <li class="mb-2"><i class="fas fa-search text-info"></i> Perform unlimited searches</li>
+                    </ul>
+                    <a href="#" class="text-primary">Check membership benefits</a>
+                    <button class="btn btn-danger btn-block mt-3" (click)="onUpgradeClick()">Upgrade now →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upgrade Membership  -->
+        <div class="col-md-9 py-3" *ngIf="!showUpgradeMembership">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Upgrade Membership</h2>
+                        <a href="#" class="text-danger">Need help?</a>
+                    </div>
+                    <div class="btn-group mb-4 d-flex" role="group">
+                        <button type="button" class="btn " [class.btn-primary]="!isAssistedView"
+                            [class.btn-tab-outline]="isAssistedView"
+                            (click)="isAssistedView = false">Self-Service</button>
+                        <button type="button" class="btn " [class.btn-primary]="isAssistedView"
+                            [class.btn-tab-outline]="!isAssistedView" (click)="isAssistedView = true">Assisted</button>
+                    </div>
+
+
+                    <!-- Self-Service View -->
+                    <div *ngIf="!isAssistedView">
+                        <div class="row">
+                            <div class="col-md-4" *ngFor="let plan of plans">
+                                <div class="card" [class.border-danger]="plan.name === selectedPlanName">
+                                    <div class="card-header">
+                                        {{ plan.name }}
+                                        <span *ngIf="plan.name === 'Pro Supreme'"
+                                            class="badge badge-success float-right">Top Seller</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-unstyled">
+                                            <li *ngFor="let feature of features">
+                                                <ng-container [ngSwitch]="feature.type">
+                                                    <span *ngSwitchCase="'check'">✓</span>
+                                                    <span *ngSwitchCase="'cross'">✗</span>
+                                                    <span *ngSwitchDefault>{{ plan[feature.key] }}</span>
+                                                </ng-container>
+                                                {{ feature.name }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-4" *ngFor="let duration of selfServiceDurations">
+                                <div class="card" [class.border-danger]="duration.selected">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ duration.name }}</h5>
+                                        <p class="card-text">INR {{ duration.price }}</p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" [id]="duration.name"
+                                                [checked]="duration.selected" (change)="onDurationChange(duration)">
+                                            <label class="form-check-label" [for]="duration.name"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row  mt-4">
+                            <div class="col-md-12">
+                                <button class="btn btn-primary w-100" (click)="proceedToCheckout()">
+                                    Get {{selectedPlanName}} now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assisted View -->
+                    <div *ngIf="isAssistedView">
+                        <h3>Exclusive</h3>
+                        <div class="row">
+
+                            <div class="col-12">
+
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-medal text-primary"></i> Benefits of Top Seller + unlimited
+                                        matches
+                                        daily</li>
+                                    <li><i class="fas fa-user-tie text-primary"></i> Dedicated relationship manager to
+                                        help you
+                                    </li>
+                                    <ul>
+                                        <li>Enhance your profile</li>
+                                        <li>Find most relevant & serious matches</li>
+                                        <li>Get additional info of the bride & her family</li>
+                                        <li>With 3 times faster matching</li>
+                                        <li>Set up unlimited meetings with profiles</li>
+                                    </ul>
+                                </ul>
+
+                                <div class="d-flex mb-3">
+                                    <button class="btn btn-outline-danger mr-2">Request Call Back</button>
+                                    <a href="#" class="btn btn-link text-danger">Know more <i
+                                            class="fas fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4" *ngFor="let duration of assistedDurations; index as i">
+                                <div class="card" [class.border-danger]="duration.selected">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ duration.name }}</h5>
+                                        <p class="card-text">INR {{ duration.price }}</p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" [id]="duration.name"
+                                                [checked]="duration.selected" (change)="onDurationChange(duration)">
+                                            <label class="form-check-label" [for]="duration.name"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-primary btn-lg btn-block mt-4" (click)="proceedToCheckout()">
+                                Get Exclusive now
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>

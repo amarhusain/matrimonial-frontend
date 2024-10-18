@@ -1,0 +1,37 @@
+<div class="confirmation-container mt-5 mb-5">
+    <div class="heart-icon">❤️</div>
+    <h1 class="title">Congratulations on Your New Beginning!</h1>
+    <div class="message">
+        <p>Dear valued member,</p>
+        <p>We're thrilled to confirm your subscription to our premium matrimonial service.
+            Your journey towards finding a life partner has just taken an exciting step forward.</p>
+        <p>May this be the beginning of a beautiful story, filled with love, understanding, and lifelong companionship.
+        </p>
+    </div>
+    <div class="order-details">
+        <h2>Order Details</h2>
+        <p><strong>Order ID:</strong> {{ orderId }}</p>
+        <p><strong>Transaction ID:</strong> {{ transactionId }}</p>
+        <p><strong>Amount Paid:</strong> ₹{{ amount | number:'1.2-2' }}</p>
+        <p><strong>Subscription Plan:</strong> {{ planName }}</p>
+    </div>
+    <div class="next-steps">
+        <h2>Your Next Steps</h2>
+        <ul>
+            <li>Complete your profile to increase your chances of finding the perfect match.</li>
+            <li>Explore our advanced search features to discover potential partners.</li>
+            <li>Engage with other members through our secure messaging system.</li>
+        </ul>
+    </div>
+    <div class="support-message">
+        <p>Our dedicated support team is here to assist you at every step of your journey.
+            Don't hesitate to reach out if you need any help or have any questions.</p>
+        <p>Wishing you all the best in your search for love and companionship!</p>
+    </div>
+    <div class="row  mt-4">
+        <div class="col-md-12">
+            <button class="btn btn-primary w-100" (click)="navigateToProfile()">Complete Your Profile</button>
+
+        </div>
+    </div>
+</div>

@@ -42,4 +42,9 @@ export class ProfileService {
     return this.http.get(`${this.apiUrl}/images/${fileName}`, { responseType: 'blob' });
   }
 
+
+  checkSubscriptionStatus(profileId: number | null): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/profiles/${profileId}/subscription-status`);
+  }
+
 }

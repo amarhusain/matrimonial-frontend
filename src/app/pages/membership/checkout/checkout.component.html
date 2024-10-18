@@ -1,0 +1,40 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="title">Find Your Perfect Match</h1>
+            <p class="subtitle mt-5">Invest in your future happiness with our premium matchmaking service</p>
+            <div class="row">
+                <div class="col text-center">
+                    <div *ngIf="checkoutData">
+                        <p>Plan: {{ checkoutData.plan }}</p>
+                        <p>Duration: {{ checkoutData.duration }}</p>
+                        <p>Amount: USD {{ checkoutData.amount }}</p>
+                        <!-- Add payment form or integration here -->
+                        <div>
+                            <button class="btn btn-primary me-2" (click)="navigateToMembershipPlan()">Change
+                                Plan</button>
+
+                            <button type="submit" class="btn btn-primary" [disabled]="isSearching"
+                                (click)="processPayment()">
+                                <span *ngIf="isSearching" class="spinner-grow spinner-grow-sm"
+                                    aria-hidden="true"></span>
+                                <span role="status">{{ isSearching ? 'Processing...' : 'Proceed to Payment' }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="message mt-5">
+                <p class="text-center">Your journey towards a meaningful relationship begins here. By subscribing to our
+                    premium service,
+                    you're taking
+                    a significant step towards finding your life partner.</p>
+                <p class="text-center">Our advanced matchmaking algorithms and extensive network of genuine profiles
+                    increase your chances
+                    of meeting
+                    someone truly special.</p>
+                <p class="text-center">Invest in your happiness today, and let us help you write your love story!</p>
+            </div>
+        </div>
+    </div>
+</div>
